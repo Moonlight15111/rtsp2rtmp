@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="false" scanPeriod="30 seconds">
+    <springProperty scope="context" name="logLevel" source="logging.default-level"/>
+    <springProperty scope="context" name="logPath" source="logging.path"/>
+    <springProperty scope="context" name="appName" source="app.name"/>
+
+    <!-- 注意这里一定要放到springProfile里, 否则在你本机执行的时候还是会去找相应的文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/${appName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${logPath}/${appName}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <maxHistory>60</maxHistory>
+            <!--日志文件最大的大小-->
+            <maxFileSize>20MB</maxFileSize>
+            <totalSizeCap>50GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="asyncFileAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>500</queueSize>
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <!--添加自定义filter Start-->
+    <!--此filter是为了websocket输出到前端页面服务-->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%black(%contextName-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{36}) - %gray(%msg%n)</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="consoleAppender" />
+    </root>
+    <!--添加自定义filter End-->
+
+    <springProfile name="dev">
+        <root level="${logLevel}">
+            <appender-ref ref="consoleAppender" />
+            <appender-ref ref="asyncFileAppender" />
+        </root>
+    </springProfile>
+</configuration>

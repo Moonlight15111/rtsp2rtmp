@@ -1,0 +1,15 @@
+app:
+  name: dss-demo
+  username:
+  password:
+  rtmp-url-prefix: rtmp://192.168.164.188:1935/hls/ #
+  rtsp-url: rtsp://192.168.2.21:8554/vlc
+  hls-url-tmplate: http://192.168.164.188:8080/hls/SEQ/index.m3u8
+  keep-alive-time: 120 # 单位：秒
+  job-limit: 10
+spring:
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+  profiles:
+    active: dev

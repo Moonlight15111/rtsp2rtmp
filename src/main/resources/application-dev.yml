@@ -1,0 +1,8 @@
+server:
+  port: 8081
+logging:
+  level:
+    root: info
+    org.springfromework.web: info
+    org.bytedeco: debug
+  path: /dsstest/log
