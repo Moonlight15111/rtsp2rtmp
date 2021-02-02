@@ -8,7 +8,7 @@
 		<version>2.0.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.qingtengtech</groupId>
+	<groupId>org.moonlight</groupId>
 	<artifactId>dssdemo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>dssdemo</name>
