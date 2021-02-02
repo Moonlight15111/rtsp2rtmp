@@ -76,6 +76,11 @@
             <artifactId>ffmpeg-platform</artifactId>
             <version>4.2.1-1.5.2</version>
         </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
     </dependencies>
 
 	<build>

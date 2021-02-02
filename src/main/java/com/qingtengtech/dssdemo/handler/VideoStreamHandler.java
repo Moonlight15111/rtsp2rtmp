@@ -35,10 +35,10 @@ public class VideoStreamHandler {
 
     private static final RtspStramHandler RTSP_STREAM_HANDLER = new RtspStramHandler();
 
-    @Value("${app.username}")
+    @Value("${dss.username}")
     private String username;
 
-    @Value("${app.password}")
+    @Value("${dss.password}")
     private String password;
 
     /**

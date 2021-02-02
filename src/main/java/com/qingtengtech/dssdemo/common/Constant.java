@@ -23,15 +23,13 @@ public final class Constant {
 
     public static final Pattern NUMBER_PATTERN = Pattern.compile("^[1-9]\\d*$");
 
-    public static final String PROTOCOL_IP_PORT = "http://10.0.15.200:80";
+    public static final String PROTOCOL_IP_PORT = "http://192.168.164.188:80";
 
     public static final String CONTENT_PATH = "/admin/API";
 
     public static final String DEFAULT_BASE_CONTENT_PATH = PROTOCOL_IP_PORT + CONTENT_PATH;
 
     /* 对于鉴权、获取设备信息的流程 HLS 和 RTSP 是一样的 */
-    /** 鉴权的URL - 根据对接文档的说明,需要进行两次鉴权
-     * 详见金山云文档: 团队文档 - 项目 - 教育 - 202004顺德大良教育智慧数据应用 - 设计 - 大华视频监控对接 - DSS平台第三方平台对接文档 **/
     public static final String DEFAULT_AUTHORIZE_URL = DEFAULT_BASE_CONTENT_PATH + "/accounts/authorize";
     /** 更新 TOKEN 的URL **/
     public static final String DEFAULT_UPDATE_TOKEN = DEFAULT_BASE_CONTENT_PATH + "/accounts/updateToken";
