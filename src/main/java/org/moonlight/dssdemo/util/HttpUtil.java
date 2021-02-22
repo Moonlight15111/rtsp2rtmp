@@ -17,6 +17,30 @@ import java.io.IOException;
  * @author Created by Moonlight on 2019/4/19.12:00
  */
 public class HttpUtil {
+
+    public static boolean urlIsEffective(String url) {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse response = null;
+
+        try {
+            response = httpClient.execute(httpGet);
+            return response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
+        } catch (IOException e) {
+            return false;
+        } finally {
+            try {
+                if (httpClient != null) {
+                    httpClient.close();
+                }
+                if (response != null) {
+                    response.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+    }
+
     public static JSONObject doGet(String url, String headerToken) throws IOException{
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(url);

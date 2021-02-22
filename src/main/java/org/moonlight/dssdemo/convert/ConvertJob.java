@@ -52,9 +52,7 @@ public class ConvertJob implements Runnable {
             this.ex = e;
         } finally {
             // 不管怎么样都清除缓存
-            CacheUtil.CONVERTING_CAMERA_CACHE.remove(cameraVO.getRtspUrl());
-            CacheUtil.CONVERT_CACHE.remove(cameraVO.getRtspUrl());
-            CacheUtil.CONVERT_JOB_CACHE.remove(cameraVO.getRtspUrl());
+            CacheUtil.removeCache(cameraVO.getRtspUrl());
         }
     }
 }
