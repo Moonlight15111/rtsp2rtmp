@@ -1,7 +1,7 @@
 # rtsp2rtmp
 
 #### 介绍
-Java Rtsp转Rtmp及大华DSS接口对接
+Java Rtsp转Rtmp及大华DSS接口对接，海康调用SDK获取设备通道并拼接rtsp地址
 
 #### 软件架构
 java后台将rtsp流转为rtmp流，并推到nginx上，nginx再将rtmp转为HLS，前端访问nginx来获取HLS流数据。

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.0.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>org.moonlight</groupId>
-	<artifactId>dssdemo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>dssdemo</name>
-	<description>Demo project for DSS</description>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>org.moonlight</groupId>
+    <artifactId>dssdemo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>dssdemo</name>
+    <description>Demo project for DSS</description>
 
-	<properties>
-		<java.version>11</java.version>
-	</properties>
+    <properties>
+        <java.version>11</java.version>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -31,65 +31,96 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.8</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.45</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.bytedeco/javacv -->
-		<!--JavaCV是对各种常用计算机视觉库的封装后的一组jar包，其中封装了FFmpeg、OpenCV等计算机视觉编程人员常用库的接口-->
-		<!--此处用来对海康威视rtsp流转为rtmp并推流用-->
-		<!--<dependency>-->
-			<!--<groupId>org.bytedeco</groupId>-->
-			<!--<artifactId>javacv-platform</artifactId>-->
-			<!--<version>1.5.4</version>-->
-		<!--</dependency>-->
-		<!-- https://mvnrepository.com/artifact/org.bytedeco/javacv -->
-		<dependency>
-			<groupId>org.bytedeco</groupId>
-			<artifactId>javacv</artifactId>
-			<version>1.5.2</version>
-		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.45</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.bytedeco/javacv -->
+        <!--JavaCV是对各种常用计算机视觉库的封装后的一组jar包，其中封装了FFmpeg、OpenCV等计算机视觉编程人员常用库的接口-->
+        <!--此处用来对海康威视rtsp流转为rtmp并推流用-->
+        <!--<dependency>-->
+        <!--<groupId>org.bytedeco</groupId>-->
+        <!--<artifactId>javacv-platform</artifactId>-->
+        <!--<version>1.5.4</version>-->
+        <!--</dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.bytedeco/javacv -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>1.5.2</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.bytedeco/ffmpeg-platform -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform</artifactId>
             <version>4.2.1-1.5.2</version>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 添加本地jar依赖 -->
+        <dependency>
+            <!-- 自定义 -->
+            <groupId>examples</groupId>
+            <!-- 自定义 -->
+            <artifactId>examples</artifactId>
+            <!-- 自定义 -->
+            <version>1.0</version>
+            <!-- 必须为system -->
+            <scope>system</scope>
+            <!-- 必须为jar包的所在路径 -->
+            <systemPath>${project.basedir}/libraries/examples.jar</systemPath>
+        </dependency>
+
+        <!-- 如上 -->
+        <dependency>
+            <groupId>jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libraries/jna.jar</systemPath>
+        </dependency>
     </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
