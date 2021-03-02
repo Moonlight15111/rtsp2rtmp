@@ -9,10 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.moonlight</groupId>
-    <artifactId>dssdemo</artifactId>
+    <artifactId>rtsp2rtmp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>dssdemo</name>
-    <description>Demo project for DSS</description>
+    <name>rtsp2rtmp</name>
 
     <properties>
         <java.version>11</java.version>

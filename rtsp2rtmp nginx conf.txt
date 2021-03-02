@@ -1,0 +1,89 @@
+#user  root;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+rtmp {  
+    server {  
+       listen 1935;
+       application hls {
+         live on;  
+         hls on;  
+         hls_path /tmp/hls;         # 请确保该目录存在或有足够的权限
+         wait_key on;               # 对视频切片进行保护，这样就不会产生马赛克了
+         hls_fragment 10s;          # 每个视频切片的时长
+         hls_playlist_length 60s;   # 总共可以回看的事件
+         hls_continuous on;         # 连续模式。
+         hls_cleanup on;            # 对多余的切片进行删除。
+         hls_nested on;             # 嵌套模式
+       }
+    } 
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    server {
+        listen       8080;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+        location /stat {
+            rtmp_stat all;
+            rtmp_stat_stylesheet stat.xsl;
+        }
+        
+        location /control {
+            rtmp_control all;
+        }
+        
+        location /hls {
+            types{  
+                application/vnd.apple.mpegurl m3u8;  
+                video/mp2t ts;  
+            }
+            root /tmp;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
+
+}

@@ -1,5 +1,5 @@
 app:
-  name: dss-demo
+  name: rtsp2rtmp
   hikvision-dll-path-prefix: E:\Moonlight\project\algorithm\rtsp2rtmp      # 海康SDK存放位置
   rtsp-main-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/main/av_stream  # 拼接设备主码流模板
   rtsp-sub-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/sub/av_stream  # 拼接设备辅码流模板
