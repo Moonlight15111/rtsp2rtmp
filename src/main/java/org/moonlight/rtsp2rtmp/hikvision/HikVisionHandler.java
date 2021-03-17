@@ -4,7 +4,7 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import lombok.extern.slf4j.Slf4j;
-import org.moonlight.rtsp2rtmp.vo.Channel;
+import org.moonlight.rtsp2rtmp.vo.hikvision.Channel;
 
 import java.util.ArrayList;
 import java.util.List;

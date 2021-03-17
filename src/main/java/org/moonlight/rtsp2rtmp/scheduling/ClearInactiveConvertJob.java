@@ -3,7 +3,7 @@ package org.moonlight.rtsp2rtmp.scheduling;
 import org.moonlight.rtsp2rtmp.cache.CacheUtil;
 import org.moonlight.rtsp2rtmp.config.CameraConfig;
 import org.moonlight.rtsp2rtmp.config.CameraConfigProvide;
-import org.moonlight.rtsp2rtmp.vo.CameraVO;
+import org.moonlight.rtsp2rtmp.vo.convert.CameraVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

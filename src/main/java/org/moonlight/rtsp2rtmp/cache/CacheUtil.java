@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.moonlight.rtsp2rtmp.convert.ConvertJob;
 import org.moonlight.rtsp2rtmp.convert.RtspToRtmpConvert;
-import org.moonlight.rtsp2rtmp.vo.CameraVO;
+import org.moonlight.rtsp2rtmp.vo.convert.CameraVO;
 
 /**
  * 〈功能简述〉<br>

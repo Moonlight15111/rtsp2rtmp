@@ -1,16 +1,17 @@
 app:
   name: rtsp2rtmp
+  rtsp-url: rtsp://root:root@192.168.53.6:554/Streaming/Channels/1 # 测试转流用的rtsp地址
   hikvision-dll-path-prefix: E:\Moonlight\project\algorithm\rtsp2rtmp      # 海康SDK存放位置
-  rtsp-main-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/main/av_stream  # 拼接设备主码流模板
-  rtsp-sub-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/sub/av_stream  # 拼接设备辅码流模板
+  rtsp-main-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/main/av_stream  # 拼接海康设备rtsp主码流地址模板
+  rtsp-sub-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/sub/av_stream  # 拼接海康设备rtsp辅码流地址模板
 dss:
   username: admin
-  password: 12345678
+  password: 12345
   convert:
     clear-inactive-task-cron: 0 0/2 * * * ? # 清理不活跃转流任务cron，暂设2分钟
     keep-alive-time: 300 # 保活时间，单位: 秒
-    rtmp-url-prefix: rtmp://192.168.164.188:1935/hls/ # rtmp地址前缀
-    hls-url-tmplate: http://192.168.164.188:8080/hls/SEQ/index.m3u8 # hls流地址模板
+    rtmp-url-prefix: rtmp://192.168.53.21:1935/hls/ # rtmp地址前缀
+    hls-url-tmplate: http://192.168.53.21:8080/hls/SEQ/index.m3u8 # hls流地址模板
     job-limit: 10 # 转流任务上限, 该值的设定必须大于0才有效
     image-width: 1280
     image-height: 720

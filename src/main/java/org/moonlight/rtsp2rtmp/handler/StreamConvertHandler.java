@@ -7,7 +7,7 @@ import org.moonlight.rtsp2rtmp.config.CameraConfig;
 import org.moonlight.rtsp2rtmp.config.CameraConfigProvide;
 import org.moonlight.rtsp2rtmp.convert.ConvertJob;
 import org.moonlight.rtsp2rtmp.util.HttpUtil;
-import org.moonlight.rtsp2rtmp.vo.CameraVO;
+import org.moonlight.rtsp2rtmp.vo.convert.CameraVO;
 import org.moonlight.rtsp2rtmp.vo.ReturnVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.AsyncConfigurer;

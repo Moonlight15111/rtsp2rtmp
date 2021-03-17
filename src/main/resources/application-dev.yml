@@ -5,4 +5,4 @@ logging:
     root: info
     org.springfromework.web: info
     org.bytedeco: debug
-  path: /dsstest/log
+  path: E:\Moonlight\project\rtsp2rtmp\log # /rtsp2rtmp/log

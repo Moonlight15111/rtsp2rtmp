@@ -31,7 +31,7 @@ public class AsyncTaskExecutorConfig implements AsyncConfigurer {
         taskExecutor.setMaxPoolSize(40);
 	    /*等待队列*/
         taskExecutor.setQueueCapacity(1000);
-        taskExecutor.setThreadNamePrefix("dssdemo-async-task-");
+        taskExecutor.setThreadNamePrefix("rtsp2rtmp-async-task-");
         taskExecutor.initialize();
 
         return taskExecutor;

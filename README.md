@@ -1,27 +1,64 @@
 # rtsp2rtmp
 
 #### 介绍
-Java Rtsp转Rtmp及大华DSS接口对接，海康调用SDK获取设备通道并拼接rtsp地址
-
+ * rtsp转rtmp
+ * 大华DSS接口对接
+ * 海康调用SDK获取设备通道并拼接rtsp地址
+ 
 #### 软件架构
-java后台将rtsp流转为rtmp流，并推到nginx上，nginx再将rtmp转为HLS，前端访问nginx来获取HLS流数据。
+##### rtsp转rtmp
+ 1. java后台将rtsp流转为rtmp流，并推到nginx上
+ 2. nginx将数据流以ts文件的形式写到磁盘上，并通过index.m3u8记录
+ 3. 前端通过nginx访问对应的index.m3u8文件来获取对应的数据流。
+##### 海康对接
+ 1. 通过海康SDK获取到对应设备的通道数、通道号
+ 2. 通过通道号拼接rtsp地址
+ 3. 将rtsp转为rtmp流
 
-nginx编译rtmp模块：
-  1. 先下载nginx-rtmp模块。传送门：https://github.com/arut/nginx-rtmp-module/
+#### 模块说明
+  ```
+  ├── HikVision - 海康DLL及Java开发Demo压缩包
+  ├── libraries - 第三方Jar包，调用海康DLL时需要用到，这两个Jar包的引入详见pom.xml
+  ├── src
+      ├── main
+          ├── java
+              ├── cache - 转流任务缓存管理
+              ├── common - 常量类定义
+              ├── config - 配置类，包括异步线程池配置、摄像头配置、海康DLL路径配置
+              ├── controller - 测试接口用的controller
+              ├── convert - 转流任务定义
+              ├── handler - handler，包括转流的handler、大华接口的handler
+              ├── hikvision - 海康SDK及handler
+              ├── scheduling - 定时任务，只有一个清理转流任务的定时任务
+              ├── util - util，只有一个httpUtil
+              ├── vo
+                  ├── convert，转流用到的VO
+                  ├── dss，大华DSS用到的VO
+                  ├── hikvision，海康需要用到的VO
+          ├── resources
+              ├── static
+                  ├── hls-video 前端播放HLS流相关JS文件
+                  ├── rtsp-video 前端播放rtsp流相关JS文件，但是不知为何在本人机器上播不了
+              ├── templates index.html
+              ├── windows-resource windows环境下rtsp转rtmp需要用到的资源
+  ```
 
-  2. 进入nginx安装目录，执行命令：
-     ./configure --add-module=/home/software/nginx-rtmp-module-master
+#### Nginx编译及配置
+##### Linux环境
+ - nginx编译rtmp模块：
+    1. 先下载nginx-rtmp模块。传送门：https://github.com/arut/nginx-rtmp-module/
+
+    2. 进入nginx安装目录，执行命令：
+        1. ./configure --add-module=/home/software/nginx-rtmp-module-master
+        2. make && make install
    
-     make && make install
-   
-     动态添加rtmp模块参考：
-       https://www.cnblogs.com/yanjieli/p/10615361.html
-       https://blog.csdn.net/qq_33833327/article/details/109154307
+ - 动态添加rtmp模块参考：
+     1. https://www.cnblogs.com/yanjieli/p/10615361.html
+     2. https://blog.csdn.net/qq_33833327/article/details/109154307
 
-Linux nginx配置文件参考项目中的rtsp2rtmp nginx conf.txt文件
-  
+- Linux nginx配置文件参考项目中的rtsp2rtmp nginx conf.txt文件
 
-Windows下Rtsp转Rtmp：
+##### Windows环境：
   
   相关资源在 resources/windows-resource,相关资源说明如下:
   

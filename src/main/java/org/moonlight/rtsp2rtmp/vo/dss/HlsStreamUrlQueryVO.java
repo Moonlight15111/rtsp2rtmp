@@ -1,4 +1,4 @@
-package org.moonlight.rtsp2rtmp.vo;
+package org.moonlight.rtsp2rtmp.vo.dss;
 
 import lombok.Getter;
 import lombok.Setter;

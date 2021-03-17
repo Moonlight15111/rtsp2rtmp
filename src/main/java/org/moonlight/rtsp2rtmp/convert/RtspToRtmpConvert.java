@@ -1,6 +1,6 @@
 package org.moonlight.rtsp2rtmp.convert;
 
-import org.moonlight.rtsp2rtmp.vo.CameraVO;
+import org.moonlight.rtsp2rtmp.vo.convert.CameraVO;
 import org.apache.commons.lang3.StringUtils;
 import org.bytedeco.ffmpeg.global.avcodec;
 import org.bytedeco.ffmpeg.global.avutil;

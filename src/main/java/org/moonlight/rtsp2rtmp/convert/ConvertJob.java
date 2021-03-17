@@ -1,7 +1,7 @@
 package org.moonlight.rtsp2rtmp.convert;
 
 import org.moonlight.rtsp2rtmp.cache.CacheUtil;
-import org.moonlight.rtsp2rtmp.vo.CameraVO;
+import org.moonlight.rtsp2rtmp.vo.convert.CameraVO;
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.FrameRecorder;

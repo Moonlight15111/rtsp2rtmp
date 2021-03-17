@@ -14,13 +14,13 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class CameraConfig {
-    /** rtmpUrl的前缀 - rtmp地址的前缀，示例: rtmp://NginxIP:Nginx-rtmp-server-监听端口/Nginx-rtmp-server-application/ **/
+    /** rtmpUrl的前缀 - 根据这个前缀来拼接rtmp地址,示例: rtmp://192.168.53.21:1935/hls/1 **/
     private String rtmpUrlPrefix;
 
-    /** hlsUrl模板 - 拼接hls流地址的模板,示例: http://NginxIP:Nginx-server-监听端口/Nginx-server-location/SEQ/index.m3u8 **/
+    /** hlsUrl模板 - 根据这个模板来生成HLS Url,前端访问的时候也是访问这个地址，示例: http://192.168.53.21:8080/hls/1/index.m3u8 **/
     private String hlsUrlTmplate;
 
-    /** 考虑到服务器的压力，设定一个转流任务上限, 该值的设定必须大于0才有效 **/
+    /** 考虑到服务器的压力，设定一个转流任务上限, 默认设置为5 **/
     private Integer jobLimit;
 
     public Integer getJobLimit() {

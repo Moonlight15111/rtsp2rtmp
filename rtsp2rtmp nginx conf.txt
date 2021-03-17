@@ -68,7 +68,7 @@ http {
             rtmp_control all;
         }
         
-        location /hls {
+        location /hls { # 访问示例 - http://192.168.53.21:8080/hls/1/index.m3u8
             types{  
                 application/vnd.apple.mpegurl m3u8;  
                 video/mp2t ts;  
