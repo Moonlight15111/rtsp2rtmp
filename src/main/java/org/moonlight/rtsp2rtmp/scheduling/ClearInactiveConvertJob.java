@@ -37,21 +37,19 @@ public class ClearInactiveConvertJob {
 
         long cur = System.currentTimeMillis();
 
-        log.info("本次扫描到转流中的摄像头CONVERTING_CAMERA_CACHE[{}]个 执行中的Convert CONVERT_CACHE[{}]个 转流任务CONVERT_JOB_CACHE[{}]个",
-                CacheUtil.CONVERTING_CAMERA_CACHE.size(), CacheUtil.CONVERT_CACHE.size(), CacheUtil.CONVERT_JOB_CACHE.size());
+        log.info("本次扫描到转流中的摄像头CONVERTING_CAMERA_CACHE[{}]个 转流任务CONVERT_JOB_CACHE[{}]个",
+                CacheUtil.CONVERTING_CAMERA_CACHE.size(), CacheUtil.CONVERT_JOB_CACHE.size());
 
         int removeCount = 0;
         CameraVO cameraVO;
         for (String rtsp : CacheUtil.CONVERTING_CAMERA_CACHE.keySet()) {
             cameraVO = CacheUtil.CONVERTING_CAMERA_CACHE.get(rtsp);
             if (cameraVO.getWatchCount() <= 0 || (((cur - cameraVO.getKeepAliveTime().getTime()) / 1000) >= cameraConfig.getKeepAliveTime())) {
-
-                CacheUtil.CONVERT_JOB_CACHE.get(rtsp).exitConvert();
                 CacheUtil.removeCache(rtsp);
-
                 removeCount++;
             }
         }
+
         log.info("本次移除无人观看或没有进行保活的转流任务[{}]个", removeCount);
     }
 

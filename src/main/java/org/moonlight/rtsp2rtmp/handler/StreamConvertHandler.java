@@ -160,10 +160,7 @@ public class StreamConvertHandler {
                 return ReturnVO.ok();
             }
 
-            ConvertJob job = CacheUtil.CONVERT_JOB_CACHE.get(rtspUrl);
-            if (job != null) {
-                job.exitConvert();
-            }
+            CacheUtil.removeCache(rtspUrl);
 
             log.info("中止转流成功rtsp[{}]cameraVo[{}]", rtspUrl, cameraVO);
 
@@ -171,9 +168,7 @@ public class StreamConvertHandler {
         } catch (Exception e) {
             log.error("中止转流时出错rtspUrl[{}]cameraVo[{}]", rtspUrl, cameraVO);
 
-            if (cameraVO != null && StringUtils.isNotBlank(cameraVO.getRtspUrl())) {
-                CacheUtil.removeCache(cameraVO.getRtspUrl());
-            }
+            CacheUtil.removeCache(rtspUrl);
 
             return ReturnVO.error(-1, e.getMessage());
         } finally {
@@ -200,5 +195,4 @@ public class StreamConvertHandler {
         }
         return ReturnVO.error(-1, "根据url找不到执行中的任务");
     }
-
 }

@@ -6,6 +6,8 @@ import org.bytedeco.ffmpeg.global.avcodec;
 import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.*;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * 〈功能简述〉<br>
  * 〈〉
@@ -16,7 +18,7 @@ import org.bytedeco.javacv.*;
  * @author Moonlight
  * @date 2021/1/23 16:38
  */
-public class RtspToRtmpConvert{
+class RtspToRtmpConvert {
 
     static {
         // 开启javacv日志，方便查错
@@ -25,15 +27,15 @@ public class RtspToRtmpConvert{
         avutil.setLogCallback(FFmpegLogCallback.getInstance());
     }
 
-    private volatile boolean exitConvert = false;
+    private final AtomicBoolean exitConvert = new AtomicBoolean(false);
 
-    private CameraVO cameraVO;
+    private final CameraVO cameraVO;
 
-    public RtspToRtmpConvert(CameraVO cameraVO) {
+    RtspToRtmpConvert(CameraVO cameraVO) {
         this.cameraVO = cameraVO;
     }
 
-    public void convert() throws FrameGrabber.Exception, FrameRecorder.Exception {
+    void convert() throws FrameGrabber.Exception, FrameRecorder.Exception {
         FFmpegFrameGrabber grabber = null;
         FFmpegFrameRecorder recorder = null;
         try {
@@ -55,11 +57,11 @@ public class RtspToRtmpConvert{
             if (StringUtils.isNotBlank(cameraVO.getConfig().getTune())) {
                 recorder.setVideoOption("tune", cameraVO.getConfig().getTune());
             }
-           /*
+            /*
              ** 权衡quality(视频质量)和encode speed(编码速度) values(值)： *
-			 * ultrafast(终极快),superfast(超级快), veryfast(非常快), faster(很快), fast(快), *
-			 * medium(中等), slow(慢), slower(很慢), veryslow(非常慢) *
-			 * ultrafast(终极快)提供最少的压缩（低编码器CPU）和最大的视频流大小；而veryslow(非常慢)提供最佳的压缩（高编码器CPU）的同时降低视频流的大小
+             * ultrafast(终极快),superfast(超级快), veryfast(非常快), faster(很快), fast(快), *
+             * medium(中等), slow(慢), slower(很慢), veryslow(非常慢) *
+             * ultrafast(终极快)提供最少的压缩（低编码器CPU）和最大的视频流大小；而veryslow(非常慢)提供最佳的压缩（高编码器CPU）的同时降低视频流的大小
              * */
             if (StringUtils.isNotBlank(cameraVO.getConfig().getPreset())) {
                 recorder.setVideoOption("preset", cameraVO.getConfig().getPreset());
@@ -70,7 +72,7 @@ public class RtspToRtmpConvert{
             }
             // 帧率
             recorder.setFrameRate(25);
-            // 关键帧间隔，与帧率相同或两倍
+            // 关键帧间隔，一般与帧率相同或者是视频帧率的两倍
             recorder.setGopSize(50);
             recorder.setImageWidth(cameraVO.getConfig().getWidth());
             recorder.setImageHeight(cameraVO.getConfig().getHeight());
@@ -80,7 +82,7 @@ public class RtspToRtmpConvert{
             recorder.start();
 
             Frame frame;
-            while(!exitConvert){
+            while(!exitConvert.get()){
                 frame = grabber.grabImage();
                 if(frame == null){
                     continue;
@@ -89,17 +91,21 @@ public class RtspToRtmpConvert{
             }
         } finally {
             if (grabber != null) {
+                grabber.flush();
                 grabber.stop();
                 grabber.close();
+                grabber = null;
             }
             if (recorder != null) {
+                recorder.flush();
                 recorder.release();
                 recorder.close();
+                recorder = null;
             }
         }
     }
 
-    public void exitConvert() {
-        this.exitConvert = true;
+    void exitConvert() {
+        this.exitConvert.set(true);
     }
 }

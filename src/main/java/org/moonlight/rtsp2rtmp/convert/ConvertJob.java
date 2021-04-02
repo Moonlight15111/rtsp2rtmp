@@ -1,5 +1,6 @@
 package org.moonlight.rtsp2rtmp.convert;
 
+import lombok.Getter;
 import org.moonlight.rtsp2rtmp.cache.CacheUtil;
 import org.moonlight.rtsp2rtmp.vo.convert.CameraVO;
 import lombok.extern.slf4j.Slf4j;
@@ -16,43 +17,39 @@ import org.bytedeco.javacv.FrameRecorder;
 @Slf4j
 public class ConvertJob implements Runnable {
 
-    private CameraVO cameraVO;
+    private final CameraVO cameraVO;
 
+    private final RtspToRtmpConvert rtspToRtmpConvert;
+
+    @Getter
     private Throwable ex;
 
+    @Getter
     private Thread execute;
 
     public ConvertJob(CameraVO cameraVO) {
         this.cameraVO = cameraVO;
+        this.rtspToRtmpConvert = new RtspToRtmpConvert(this.cameraVO);
     }
 
     public void exitConvert() {
-        RtspToRtmpConvert rtspToRtmpConvert = CacheUtil.CONVERT_CACHE.get(cameraVO.getRtspUrl());
-        if (rtspToRtmpConvert != null) {
-            rtspToRtmpConvert.exitConvert();
-        }
+        rtspToRtmpConvert.exitConvert();
     }
 
     @Override
     public void run() {
         try {
-            this.execute = Thread.currentThread();
             // 转流中的摄像头放入缓存
-            CacheUtil.CONVERTING_CAMERA_CACHE.put(cameraVO.getRtspUrl(), cameraVO);
-            // 创建转换器
-            RtspToRtmpConvert rtspToRtmpConvert = new RtspToRtmpConvert(cameraVO);
-            // 转换器放入缓存
-            CacheUtil.CONVERT_CACHE.put(cameraVO.getRtspUrl(), rtspToRtmpConvert);
+            CacheUtil.CONVERTING_CAMERA_CACHE.put(this.cameraVO.getRtspUrl(), this.cameraVO);
+            log.info("cameraVo[{}]转流开始", this.cameraVO);
             // 执行转流
-            rtspToRtmpConvert.convert();
+            this.rtspToRtmpConvert.convert();
 
-            log.info("cameraVo[{}]转流被中断或转流完毕", cameraVO);
+            log.info("cameraVo[{}]转流被中断或转流完毕", this.cameraVO);
         } catch (FrameGrabber.Exception | FrameRecorder.Exception e) {
-            log.error("执行转流任务时出错cameraVo[{}]", cameraVO, e);
-            this.ex = e;
+            log.error("执行转流任务时出错cameraVo[{}]", this.cameraVO, e);
         } finally {
-            // 不管怎么样都清除缓存
-            CacheUtil.removeCache(cameraVO.getRtspUrl());
+            CacheUtil.removeCache(this.cameraVO.getRtspUrl());
         }
     }
 }
