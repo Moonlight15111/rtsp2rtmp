@@ -39,7 +39,10 @@
               ├── static
                   ├── hls-video 前端播放HLS流相关JS文件
                   ├── rtsp-video 前端播放rtsp流相关JS文件，但是不知为何在本人机器上播不了
-              ├── templates index.html
+              ├── templates index.html H5页面示例
+              ├── vue-example vue页面示例，需要安装video.js(npm install video.js)，
+                                 参考: https://www.jianshu.com/p/8b8023c7ed37
+                                 中文文档: https://blog.csdn.net/qq285679784/article/details/86060723
               ├── windows-resource windows环境下rtsp转rtmp需要用到的资源
   ```
 
