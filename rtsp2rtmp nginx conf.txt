@@ -76,6 +76,24 @@ http {
             root /tmp;
         }
 
+        # 大华HLS视频播放代理
+		location /stream/dss/ {
+            keepalive_timeout 30;
+            keepalive_requests 10000000;
+            proxy_buffer_size          64k;
+            proxy_buffers              4 128k;
+            proxy_busy_buffers_size    256k;
+            proxy_temp_file_write_size 256k;
+            proxy_next_upstream error timeout invalid_header http_500 http_503 http_404 http_502;
+    		proxy_cache off;                                   # 禁用代理缓存
+   		    expires -1;                                        # 禁用页面缓存
+   			proxy_pass http://192.168.1.200:7086/;                     # 反代目标 URL
+    		sub_filter 'http://192.168.1.200:7086' 'http://$host/';  # 替换 m3u8 文件里的资源链接
+    		sub_filter_last_modified off;                      # 删除原始响应里的浏览器缓存值
+    		sub_filter_once off;                               # 替换所有匹配内容
+    		sub_filter_types *;                                # 匹配任何 MIME 类型
+		}
+
         #error_page  404              /404.html;
 
         # redirect server error pages to the static page /50x.html
