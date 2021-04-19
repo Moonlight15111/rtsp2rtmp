@@ -82,28 +82,28 @@
 
 ##### 异常说明：
     一、加密视频JavaCPP无法停止转流
-       异常描述：通过海康的SDK获取到了海康NVR上面所有的通道，且RTSP地址拼接无误，设备、网络等一切正常。根据获取到的RTSP地址创建好转流任务后，没有任何视频画面播出，一直404。发现nginx配置的路径下没有创建对应的文件夹及m3u8、ts文件，nginx日志除了访问的地址404以外没有任何其他异常信息输出，JavaCPP日志一直输出如下信息:
-       `2021-04-08 17:00:06.695 [JavaCPP Thread ID 20248] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bc0056c0] Error parsing NAL unit #0.
-2021-04-08 17:00:06.698 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0
-2021-04-08 17:00:06.698 [JavaCPP Thread ID 83092] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bc0024c0] PPS id out of range: 1
-2021-04-08 17:00:06.701 [JavaCPP Thread ID 83092] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bc0024c0] Error parsing NAL unit #0.
-2021-04-08 17:00:06.702 [JavaCPP Thread ID 23708] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45080] PPS id out of range: 0
-2021-04-08 17:00:06.704 [JavaCPP Thread ID 23708] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45080] Error parsing NAL unit #0.
-2021-04-08 17:00:06.704 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] vps_reserved_three_2bits is not three
-2021-04-08 17:00:06.707 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] VPS 13 does not exist
-2021-04-08 17:00:06.709 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] SPS 0 does not exist.
-2021-04-08 17:00:06.709 [gm-camera-demo-async-task-1] WARN  org.bytedeco.javacv.FFmpegLogCallback - [swscaler @ 00000030bc0369c0] deprecated pixel format used, make sure you did set range correctly
-2021-04-08 17:00:06.710 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 1
-2021-04-08 17:00:06.713 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0
-2021-04-08 17:00:06.713 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] vps_reserved_three_2bits is not three
-2021-04-08 17:00:06.716 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] VPS 13 does not exist
-2021-04-08 17:00:06.718 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] SPS 0 does not exist.
-2021-04-08 17:00:06.719 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] PPS id out of range: 1
-2021-04-08 17:00:06.721 [JavaCPP Thread ID 32048] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] Error parsing NAL unit #4.
-2021-04-08 17:00:06.722 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0
-2021-04-08 17:00:06.722 [JavaCPP Thread ID 80840] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45980] PPS id out of range: 0
-2021-04-08 17:00:06.725 [JavaCPP Thread ID 80840] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45980] Error parsing NAL unit #0.
-2021-04-08 17:00:06.726 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0`
-即使在转流任务被清除后，该JavaCPP线程依旧在疯狂运行，占用了大量系统资源，没办法只能重启程序才能彻底结束这些线程。
-      解决办法：经过排除、对比后发现，这个NVR启用了萤石云的加密，在后台关闭加密后，就能够正常转流、播放了。
-      遗留问题：想不通为什么转流任务被清除后，对应的JavaCPP线程依旧在疯狂运行，后续去bytedeco提个issue问问看
+       1. 异常描述：通过海康的SDK获取到了海康NVR上面所有的通道，且RTSP地址拼接无误，设备、网络等一切正常。根据获取到的RTSP地址创建好转流任务后，没有任何视频画面播出，一直404。发现nginx配置的路径下没有创建对应的文件夹及m3u8、ts文件，nginx日志除了访问的地址404以外没有任何其他异常信息输出，JavaCPP日志一直输出如下信息:
+                    `2021-04-08 17:00:06.695 [JavaCPP Thread ID 20248] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bc0056c0] Error parsing NAL unit #0.
+                    2021-04-08 17:00:06.698 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0
+                    2021-04-08 17:00:06.698 [JavaCPP Thread ID 83092] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bc0024c0] PPS id out of range: 1
+                    2021-04-08 17:00:06.701 [JavaCPP Thread ID 83092] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bc0024c0] Error parsing NAL unit #0.
+                    2021-04-08 17:00:06.702 [JavaCPP Thread ID 23708] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45080] PPS id out of range: 0
+                    2021-04-08 17:00:06.704 [JavaCPP Thread ID 23708] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45080] Error parsing NAL unit #0.
+                    2021-04-08 17:00:06.704 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] vps_reserved_three_2bits is not three
+                    2021-04-08 17:00:06.707 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] VPS 13 does not exist
+                    2021-04-08 17:00:06.709 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] SPS 0 does not exist.
+                    2021-04-08 17:00:06.709 [gm-camera-demo-async-task-1] WARN  org.bytedeco.javacv.FFmpegLogCallback - [swscaler @ 00000030bc0369c0] deprecated pixel format used, make sure you did set range correctly
+                    2021-04-08 17:00:06.710 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 1
+                    2021-04-08 17:00:06.713 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0
+                    2021-04-08 17:00:06.713 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] vps_reserved_three_2bits is not three
+                    2021-04-08 17:00:06.716 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] VPS 13 does not exist
+                    2021-04-08 17:00:06.718 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] SPS 0 does not exist.
+                    2021-04-08 17:00:06.719 [JavaCPP Thread ID 32048] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] PPS id out of range: 1
+                    2021-04-08 17:00:06.721 [JavaCPP Thread ID 32048] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45500] Error parsing NAL unit #4.
+                    2021-04-08 17:00:06.722 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0
+                    2021-04-08 17:00:06.722 [JavaCPP Thread ID 80840] ERROR org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45980] PPS id out of range: 0
+                    2021-04-08 17:00:06.725 [JavaCPP Thread ID 80840] WARN  org.bytedeco.javacv.FFmpegLogCallback - [hevc @ 00000030bce45980] Error parsing NAL unit #0.
+                    2021-04-08 17:00:06.726 [gm-camera-demo-async-task-1] ERROR org.bytedeco.javacv.FFmpegLogCallback - [NULL @ 00000030bce44c00] PPS id out of range: 0`
+                    即使在转流任务被清除后，该JavaCPP线程依旧在疯狂运行，占用了大量系统资源，没办法只能重启程序才能彻底结束这些线程。
+       2. 解决办法：经过排除、对比后发现，这个NVR启用了萤石云的加密，在后台关闭加密后，就能够正常转流、播放了。
+       3. 遗留问题：想不通为什么转流任务被清除后，对应的JavaCPP线程依旧在疯狂运行，后续去bytedeco提个issue问问看
