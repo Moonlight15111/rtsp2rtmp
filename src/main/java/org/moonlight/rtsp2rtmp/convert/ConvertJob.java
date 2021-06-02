@@ -41,11 +41,10 @@ public class ConvertJob implements Runnable {
         try {
             // 转流中的摄像头放入缓存
             CacheUtil.CONVERTING_CAMERA_CACHE.put(this.cameraVO.getRtspUrl(), this.cameraVO);
-            log.info("cameraVo[{}]转流开始", this.cameraVO);
+            log.info("转流开始cameraVo[{}]", this.cameraVO);
             // 执行转流
             this.rtspToRtmpConvert.convert();
-
-            log.info("cameraVo[{}]转流被中断或转流完毕", this.cameraVO);
+            log.info("转流被中断或转流完毕cameraVo[{}]", this.cameraVO);
         } catch (FrameGrabber.Exception | FrameRecorder.Exception e) {
             log.error("执行转流任务时出错cameraVo[{}]", this.cameraVO, e);
         } finally {

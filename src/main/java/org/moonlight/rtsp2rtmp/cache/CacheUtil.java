@@ -24,7 +24,6 @@ public final class CacheUtil {
         if (CONVERT_JOB_CACHE.containsKey(rtspUrl)) {
             ConvertJob remove = CONVERT_JOB_CACHE.remove(rtspUrl);
             remove.exitConvert();
-            remove = null;
         }
         if (CONVERTING_CAMERA_CACHE.containsKey(rtspUrl)) {
             CONVERTING_CAMERA_CACHE.remove(rtspUrl);

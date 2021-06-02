@@ -91,16 +91,10 @@ class RtspToRtmpConvert {
             }
         } finally {
             if (grabber != null) {
-                grabber.flush();
-                grabber.stop();
                 grabber.close();
-                grabber = null;
             }
             if (recorder != null) {
-                recorder.flush();
-                recorder.release();
                 recorder.close();
-                recorder = null;
             }
         }
     }

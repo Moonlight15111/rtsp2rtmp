@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -55,20 +56,6 @@ public class StreamConvertHandler {
 
     /**
      * 功能描述: <br>
-     * 〈〉
-     * 获取当前编号
-     *
-     * @return long 当前编号
-     * @author Moonlight
-     * @date 2021/1/25 11:12
-     * @since 1.0.0
-     */
-    public long getSeq() {
-        return this.seq.get();
-    }
-
-    /**
-     * 功能描述: <br>
      * 〈将rtsp转为rtmp，并返回一个hls地址〉
      * 传入一个rtsp流地址:
      * 1. 如果该地址已经在进行转流了，那么直接从缓存中获取对应的hls地址返回
@@ -84,10 +71,9 @@ public class StreamConvertHandler {
      * @since 1.0.0
      */
     public ReturnVO rtsp2Rtmp(String rtspUrl) {
+        lock.lock();
         CameraVO cameraVO = null;
         try {
-            lock.lock();
-
             // 该RTSP地址已有转流任务，存在HLSUrl地址，且该地址可用( && HttpUtil.urlIsEffective(cameraVO.getHlsUrl()))，那么观看人数加1, 直接返回地址
             cameraVO = CacheUtil.CONVERTING_CAMERA_CACHE.get(rtspUrl);
             if (cameraVO != null) {
@@ -114,14 +100,14 @@ public class StreamConvertHandler {
             cameraVO = new CameraVO(rtspUrl, cameraConfig.getRtmpUrlPrefix() + seq, hlsUrl, cameraConfig);
             ConvertJob convertJob = new ConvertJob(cameraVO);
 
-            if (asyncConfigurer.getAsyncExecutor() != null) {
+            if (asyncConfigurer != null && asyncConfigurer.getAsyncExecutor() != null) {
                 CacheUtil.CONVERT_JOB_CACHE.put(cameraVO.getRtspUrl(), convertJob);
 
                 asyncConfigurer.getAsyncExecutor().execute(convertJob);
 
                 return ReturnVO.ok().put("url", hlsUrl);
             } else {
-                throw new RuntimeException("执行转流任务时发生异常，异步线程池配置为空.");
+                throw new RuntimeException("执行转流任务时发生异常，请配置好异步任务线程池");
             }
         } catch (Exception e) {
             log.error("创建并执行转流任务时出错rtspUrl[{}]cameraVo[{}]", rtspUrl, cameraVO, e);
@@ -145,10 +131,9 @@ public class StreamConvertHandler {
      * @since 1.0.0
      */
     public ReturnVO exitConvert(String rtspUrl) {
+        lock.lock();
         CameraVO cameraVO = null;
         try {
-            lock.lock();
-
             cameraVO = CacheUtil.CONVERTING_CAMERA_CACHE.get(rtspUrl);
 
             if (cameraVO == null) {
@@ -194,5 +179,46 @@ public class StreamConvertHandler {
             return ReturnVO.ok();
         }
         return ReturnVO.error(-1, "根据url找不到执行中的任务");
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉
+     * 获取当前转流任务的数量
+     * @return ReturnVO
+     * @since 1.0.0
+     * @author Moonlight
+     * @date 2021/6/1 12:21
+     */
+    public ReturnVO getConvertJonCnt() {
+        lock.lock();
+        try {
+            return ReturnVO.ok().put("cnt", CacheUtil.CONVERT_JOB_CACHE.size());
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉
+     * 移除所有的转流任务
+     * @return ReturnVO
+     * @since 1.0.0
+     * @author Moonlight
+     * @date 2021/6/1 14:36
+     */
+    public ReturnVO removeAllConvertJob() {
+        lock.lock();
+        try {
+            for (String key : CacheUtil.CONVERT_JOB_CACHE.keySet()) {
+                CacheUtil.removeCache(key);
+            }
+            CacheUtil.CONVERTING_CAMERA_CACHE.clear();
+            CacheUtil.CONVERT_JOB_CACHE.clear();
+        } finally {
+            lock.unlock();
+        }
+        return ReturnVO.ok();
     }
 }
