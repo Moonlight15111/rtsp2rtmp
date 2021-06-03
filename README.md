@@ -126,4 +126,16 @@
                        但是 m3u8 文件没有创建出来或者需要等很久(30秒或以上)才会创建出来
           2. 解决办法: 减少转流任务数上限。根据nginx rtmp module 开发者的说法: M3u8 is always created after the first segment file (https://github.com/arut/nginx-rtmp-module/issues/1126)
           3. 遗留问题: 个人感觉还是和服务器的性能、网络带宽有很关, 但是目前条件有限不好实验
+   三、转流任务的线程名相同
+          1. 异常描述: 检查日志时，发现转流任务的日志的线程名都是一样的，使用jstack追踪进去发现实际上是不同的线程，但是线程名确实是一模一样。
+          2. 解决办法: 在getAsyncExecutor()上加@Bean注解。通过debug、查阅Spring源码，发现是开发脚手架的异步任务线程池配置有问题，并没有将Executor纳入Spring管理。也就是说在调用
+                       getAsyncExecutor()方法执行转流任务时，每次都会生成一个新的线程池，在新生成的线程池中创建一条新的线程，由于线程池的配置都是一致的，所以线程的名称也会一致
+                       虽然不影响使用，但是影响日志查阅、线程池也无法复用造成不必要的开销。
+          3. 补充说明: 由于一些原因，实际线上并没有使用上述方式解决，而是自己自定义了一个ThreadPoolExecutor进行管理。另外关于 getAsyncExecutor() 返回的 Executor 的更多说明，
+                       请自行查看@EnableAsync 注解的源码注释。最重要的一段注释如下:  
+                       * <p>Note: In the above example the {@code ThreadPoolTaskExecutor} is not a fully managed
+                       * Spring bean. Add the {@code @Bean} annotation to the {@code getAsyncExecutor()} method
+                       * if you want a fully managed bean. In such circumstances it is no longer necessary to
+                       * manually call the {@code executor.initialize()} method as this will be invoked
+                       * automatically when the bean is initialized.
   ~~~     

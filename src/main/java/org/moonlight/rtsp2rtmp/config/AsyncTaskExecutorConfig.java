@@ -3,6 +3,7 @@ package org.moonlight.rtsp2rtmp.config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -19,25 +20,21 @@ import java.util.concurrent.Executor;
  * @date 2021/1/20 14:55
  */
 @Slf4j
-@Configuration
 @EnableAsync
+@Configuration
 public class AsyncTaskExecutorConfig implements AsyncConfigurer {
 
     @Value("${dss.convert.job-limit}")
     private Integer jobLimit;
 
+    @Bean
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-	    /*最小线程数*/
         taskExecutor.setCorePoolSize(jobLimit);
-	    /*最大线程数*/
         taskExecutor.setMaxPoolSize(2 * jobLimit);
-	    /*等待队列*/
         taskExecutor.setQueueCapacity(jobLimit);
-        taskExecutor.setThreadNamePrefix("rtsp2rtmp-async-task-");
-        taskExecutor.initialize();
-
+        taskExecutor.setThreadNamePrefix("rtsp2rtmp-convert-job-");
         return taskExecutor;
     }
 
