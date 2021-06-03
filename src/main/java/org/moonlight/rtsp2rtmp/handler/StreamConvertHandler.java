@@ -34,10 +34,15 @@ public class StreamConvertHandler {
      **/
     private final AtomicLong seq;
 
+//    /**
+//     * 异步线程池配置 - 转流任务将通过异步线程来执行，需要一个异步线程池，如果没有配置异步线程池创建转流任务时将会抛出RuntimeException
+//     **/
+//    private final AsyncConfigurer asyncConfigurer;
+
     /**
      * 异步线程池配置 - 转流任务将通过异步线程来执行，需要一个异步线程池，如果没有配置异步线程池创建转流任务时将会抛出RuntimeException
      **/
-    private final AsyncConfigurer asyncConfigurer;
+    private final ThreadPoolExecutor covertJobExecutor;
 
     /**
      * 可重入锁 - 保证创建转流任务、中止转流任务时的线程安全性
@@ -47,11 +52,28 @@ public class StreamConvertHandler {
     private CameraConfigProvide cameraConfigProvide;
 
     @Autowired
-    public StreamConvertHandler(AsyncConfigurer asyncConfigurer, CameraConfigProvide cameraConfigProvide) {
-        this.asyncConfigurer = asyncConfigurer;
+    public StreamConvertHandler(/* AsyncConfigurer asyncConfigurer, */
+                                ThreadPoolExecutor covertJobExecutor,
+                                CameraConfigProvide cameraConfigProvide) {
+//        this.asyncConfigurer = asyncConfigurer;
+        this.covertJobExecutor = covertJobExecutor;
         this.cameraConfigProvide = cameraConfigProvide;
         this.seq = new AtomicLong(0);
         this.lock = new ReentrantLock();
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈〉
+     * 获取当前编号
+     *
+     * @return long 当前编号
+     * @author Moonlight
+     * @date 2021/1/25 11:12
+     * @since 1.0.0
+     */
+    public long getSeq() {
+        return this.seq.get();
     }
 
     /**
@@ -62,7 +84,7 @@ public class StreamConvertHandler {
      * 2. 如果该地址没有在转流，那么：(1).获取自增编号{@link #seq}
      * (2).根据自增编号拼接处真正的rtmp、hls地址
      * (3).创建{@link CameraVO} {@link ConvertJob}
-     * (4).将ConvertJob放入异步线程池{@link #asyncConfigurer}执行，返回hls地址
+     * (4).将ConvertJob放入异步线程池{@link #covertJobExecutor}执行，返回hls地址
      *
      * @param rtspUrl rtsp流的地址
      * @return ReturnVO hls流地址 或 异常信息
@@ -72,6 +94,7 @@ public class StreamConvertHandler {
      */
     public ReturnVO rtsp2Rtmp(String rtspUrl) {
         lock.lock();
+
         CameraVO cameraVO = null;
         try {
             // 该RTSP地址已有转流任务，存在HLSUrl地址，且该地址可用( && HttpUtil.urlIsEffective(cameraVO.getHlsUrl()))，那么观看人数加1, 直接返回地址
@@ -100,14 +123,16 @@ public class StreamConvertHandler {
             cameraVO = new CameraVO(rtspUrl, cameraConfig.getRtmpUrlPrefix() + seq, hlsUrl, cameraConfig);
             ConvertJob convertJob = new ConvertJob(cameraVO);
 
-            if (asyncConfigurer != null && asyncConfigurer.getAsyncExecutor() != null) {
+            if (/* asyncConfigurer.getAsyncExecutor() != null */
+                    covertJobExecutor != null) {
                 CacheUtil.CONVERT_JOB_CACHE.put(cameraVO.getRtspUrl(), convertJob);
 
-                asyncConfigurer.getAsyncExecutor().execute(convertJob);
+                /* asyncConfigurer.getAsyncExecutor().execute(convertJob); */
+                covertJobExecutor.execute(convertJob);
 
                 return ReturnVO.ok().put("url", hlsUrl);
             } else {
-                throw new RuntimeException("执行转流任务时发生异常，请配置好异步任务线程池");
+                throw new RuntimeException("执行转流任务时发生异常，线程池配置为空.");
             }
         } catch (Exception e) {
             log.error("创建并执行转流任务时出错rtspUrl[{}]cameraVo[{}]", rtspUrl, cameraVO, e);
@@ -132,6 +157,7 @@ public class StreamConvertHandler {
      */
     public ReturnVO exitConvert(String rtspUrl) {
         lock.lock();
+
         CameraVO cameraVO = null;
         try {
             cameraVO = CacheUtil.CONVERTING_CAMERA_CACHE.get(rtspUrl);
@@ -221,4 +247,5 @@ public class StreamConvertHandler {
         }
         return ReturnVO.ok();
     }
+
 }
