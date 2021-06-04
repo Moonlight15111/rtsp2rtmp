@@ -25,6 +25,8 @@ public class CameraConfiguration implements CameraConfigProvide {
     private Integer crf;
     private String preset;
     private String clearInactiveTaskCron;
+    private Integer socketTimeout;
+    private Integer rwTimeout;
 
     @Override
     public CameraConfig provide() {
@@ -37,6 +39,8 @@ public class CameraConfiguration implements CameraConfigProvide {
                 .setHeight(this.imageHeight)
                 .setTune(this.tune)
                 .setCrf(this.crf)
-                .setPreset(this.preset);
+                .setPreset(this.preset)
+                .setSocketTimeout(this.socketTimeout)
+                .setRwTimeout(this.rwTimeout);
     }
 }

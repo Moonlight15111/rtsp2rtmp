@@ -43,6 +43,9 @@ class RtspToRtmpConvert {
             // 使用tcp的方式，不然会丢包很严重
             grabber.setOption("rtsp_transport", "tcp");
 
+            grabber.setOption("stimeout", String.valueOf(cameraVO.getConfig().getSocketTimeout() * 1_000_000));
+            grabber.setOption("rw_timeout", String.valueOf(cameraVO.getConfig().getRwTimeout() * 1_000_000));
+
             grabber.setImageWidth(cameraVO.getConfig().getWidth());
             grabber.setImageHeight(cameraVO.getConfig().getHeight());
 
@@ -50,7 +53,11 @@ class RtspToRtmpConvert {
             // 流媒体输出地址，分辨率（长，高），是否录制音频（0:不录制/1:录制）
             recorder = new FFmpegFrameRecorder(cameraVO.getRtmpUrl(), cameraVO.getConfig().getWidth(), cameraVO.getConfig().getHeight(), 0);
             recorder.setInterleaved(true);
-            recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+
+//          recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+            recorder.setVideoCodec(avcodec.AV_CODEC_ID_H265);
+//          recorder.setVideoCodecName("H265");
+
             // rtmp的类型
             recorder.setFormat("flv");
             // 降低编码延时

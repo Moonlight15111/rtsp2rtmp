@@ -23,7 +23,9 @@ public final class Constant {
 
     public static final int DEFAULT_IMAGE_HEIGHT = 480;
 
+    public static final int DEFAULT_SOCKET_TIME_OUT_SECOND = 15;
 
+    public static final int DEFAULT_RW_TIME_OUT_SECOND = 30;
 
     /* DSS - 下面这些常量是大华DSS平台需要用到的常量 */
 

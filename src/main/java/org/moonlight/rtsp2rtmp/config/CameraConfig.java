@@ -58,4 +58,22 @@ public class CameraConfig {
      * ultrafast(终极快)提供最少的压缩（低编码器CPU）和最大的视频流大小；而veryslow(非常慢)提供最佳的压缩（高编码器CPU）的同时降低视频流的大小
      * **/
     private String preset;
+
+    /** socket TCP IO 超时时间。这个参数主要是为了防止程序在{@link org.bytedeco.javacv.FFmpegFrameGrabber#start()}方法上吊死，
+     * 这个方法是加了sync的里面默认是阻塞的，遇到网络不通、数据流错误等异常情况时，会导致该函数长时间不返回
+     * ffmpeg中单位为微秒，所以实际使用时会将其乘以 1_000_000
+     * 另外值得一提的是在连接有问题是{@link org.bytedeco.javacv.FFmpegFrameGrabber#start()}中会有重试机制，所以这个值不应该设置的很大
+     * **/
+    private Integer socketTimeout;
+
+    public Integer getSocketTimeout() {
+        return socketTimeout == null || socketTimeout <= 0 ? Constant.DEFAULT_SOCKET_TIME_OUT_SECOND : socketTimeout;
+    }
+
+    /** 等待（网络）读/写操作完成的最长时间 ffmpeg中单位为微秒，所以实际使用时会将其乘以 1_000_000 **/
+    private Integer rwTimeout;
+
+    public Integer getRwTimeout() {
+        return rwTimeout == null || rwTimeout <= 0 ? Constant.DEFAULT_RW_TIME_OUT_SECOND : rwTimeout;
+    }
 }
