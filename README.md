@@ -138,4 +138,9 @@
                        * if you want a fully managed bean. In such circumstances it is no longer necessary to
                        * manually call the {@code executor.initialize()} method as this will be invoked
                        * automatically when the bean is initialized.
+   四、转流任务全部吊死，半天没有响应，直至连接超时
+          1. 异常描述: 在存在多个转流任务时，如果第一个获取到互斥资源进行转流的任务出现网络不通等异常状况时，会阻塞住，导致后面的转流任务全部吊死等着。
+          2. 解决办法: 为转流任务配置stimeout、rwtimeout等参数
+          3. 补充说明: 这个问题的本质在于FFmpegFrameGrabber的start()是用org.bytedeco.ffmpeg.global.avcodec.class锁上的，在start()方法内部调用的是ffmpeg的avformat_open_input
+                       方法，这个方法是底层是走一个tcp连接，如果你不设置超时时间，就是使用默认的tcp超时时间，这个时间要长一点，这段时间内这个线程也不会释放锁，其他线程就只有等着了
   ~~~     

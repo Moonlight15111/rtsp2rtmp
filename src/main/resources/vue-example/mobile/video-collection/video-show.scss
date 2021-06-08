@@ -1,0 +1,11 @@
+.video-show {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+
+  &__item {
+    color: #333;
+    background-color: #000;
+    border: 1px solid #fff;
+  }
+}

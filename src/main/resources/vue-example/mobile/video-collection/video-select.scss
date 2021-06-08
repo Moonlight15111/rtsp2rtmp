@@ -1,0 +1,21 @@
+.video-select {
+  margin-top: 10px;
+  padding: 13px;
+  border-radius: 4px;
+  background-color: #fff;
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+
+    i {
+      font-size: 18px;
+    }
+
+    &-text {
+      overflow: hidden; // 超出的文本隐藏
+      text-overflow: ellipsis; // 溢出用省略号显示
+      white-space: nowrap; // 溢出不换行
+    }
+  }
+}
