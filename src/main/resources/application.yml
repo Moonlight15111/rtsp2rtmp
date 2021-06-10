@@ -1,20 +1,20 @@
 app:
   name: rtsp2rtmp
   rtsp-url: rtsp://root:root@192.168.53.6:554/Streaming/Channels/1 # 测试转流用的rtsp地址
-  hikvision-dll-path-prefix: /project/vctest/HikVision/libhcnetsdk.so  # 海康SDK存放位置 windows: E:\Moonlight\project\rtsp2rtmp\HikVision\windows\HCNetSDK.dll
+  hikvision-dll-path: /project/vctest/HikVision/libhcnetsdk.so  # 海康SDK存放位置 windows: E:\Moonlight\project\rtsp2rtmp\HikVision\windows\HCNetSDK.dll
   rtsp-main-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/main/av_stream  # 拼接海康设备rtsp主码流地址模板 - 2012年以前的设备Url规定
   rtsp-sub-url-tmplate: rtsp://USERNAME:PASSWORD@IP:554/h265/chCHANNELNUM/sub/av_stream  # 拼接海康设备rtsp辅码流地址模板 - 2012年以前的设备Url规定
   # 目前海康录像机、网络摄像机，网络球机的RTSP单播取流格式如下
   # rtsp://用户名:密码@IP:554/Streaming/Channels/101
   # 示例:
-  # 取第1个通道的主码流    rtsp://admin:hik12345@10.16.4.25:554/Streaming/Channels/101
-  # 取第1个通道的子码流    rtsp://admin:hik12345@10.16.4.25:554/Streaming/Channels/102
-  # 取第1个通道的第三码流  rtsp://admin:hik12345@10.16.4.25:554/Streaming/Channels/103
-  # 取第12个通道的主码流   rtsp://admin:hik12345@10.16.4.25:554/Streaming/Channels/1201
+  # 取第1个通道的主码流    rtsp://xxxx:12345@192.168.4.25:554/Streaming/Channels/101
+  # 取第1个通道的子码流    rtsp://xxxx:12345@192.168.4.25:554/Streaming/Channels/102
+  # 取第1个通道的第三码流  rtsp://xxxx:12345@192.168.4.25:554/Streaming/Channels/103
+  # 取第12个通道的主码流   rtsp://xxxx:12345@192.168.4.25:554/Streaming/Channels/1201
   # 海康2012年以前的设备URL示例:
-  #   主码流  rtsp://admin:12345@192.0.0.64:554/h264/ch1/main/av_stream
-  #   子码流  rtsp://admin:12345@192.0.0.64:554/h264/ch1/sub/av_stream
-  #   零通道  rtsp://admin:12345@192.0.0.64:554/h264/ch0/main/av_stream
+  #   主码流  rtsp://xxxx:12345@192.168.4.25:554/h264/ch1/main/av_stream
+  #   子码流  rtsp://xxxx:12345@192.168.4.25:554/h264/ch1/sub/av_stream
+  #   零通道  rtsp://xxxx:12345@192.168.4.25:554/h264/ch0/main/av_stream
 
 dss:
   username: admin
