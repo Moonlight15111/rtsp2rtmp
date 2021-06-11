@@ -155,5 +155,23 @@
                        这下就好了, 能正常访问了
           3. 补充说明: 起先怀疑是路由器到海康摄像头之间的网络有问题，但是直接通过 192.168.1.10:554 又能访问, 所以想着是不是端口的问题，把 554 端口改掉以后果然可行。
                        到底是为什么554不行，换个端口又行了，也没想明白，猜测可能是端口被占用或者被屏蔽了？如果有人知道具体原因，还请赐教。
-             
+  六、苹果手机上视频播放会自动进入全屏状态且无法多播
+          1. 异常描述: 苹果手机上，点击视频播放后，在数据流推过来并进行播放时，会自动进入全屏状态，且无法同时播放多个视频，同一时刻只能有一个视频进行播放，其他的视频会自动暂停
+          2. 解决办法: video 标签去掉 data-setup 属性，preload属性设置为metadata  同时为 video 标签设置 webkit-playsinline、playsinline、x5-playsinline、x-webkit-airplay="allow"
+                       上述配置可以解决自动进入全屏状态的问题，为 video 标签设置 autoplay、muted 属性可以解决无法同时播放多个视频的问题
+          3. 补充说明: 出现上述情况，和IOS、safari 对视频、音频的播放策略有关，结合文档，推测应该是为了替用户省钱，因为用户可以处于使用移动网络的状态下，是按数据单位收费的，所以
+                       IOS、safari 不会对视频、音频进行任何预加载、自动播放等操作，只有用户实际触发这个动作才会加载数据，另一个方面可能是减少带宽压力。
+                       文档内容摘抄如下: 
+                           In Safari on iOS (for all devices, including iPad), where the user may be on a cellular network and be charged per data unit,
+                           preload and autoplay are disabled. No data is loaded until the user initiates it. This means the JavaScript play() and load()
+                           methods are also inactive until the user initiates playback, unless the play() or load() method is triggered by user action.
+                           In other words, a user-initiated Play button works, but an onLoad="play()" event does not.             
+                       详见: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/PlayingandSynthesizingSounds/PlayingandSynthesizingSounds.html#//apple_ref/doc/uid/TP40009523-CH6-SW1
+                             https://webkit.org/blog/6784/new-video-policies-for-ios/   
+  七、苹果手机多播时出现即使后台已经推流成功了，但还是不能播放
+          1. 异常描述: 苹果手机多播时出现即使后台已经推流成功了，但还是不能播放，并提示
+                       The media playback was aborted due to a corruption problem or because the media used features your browser did not support.
+                       在刷新页面后重新点进来又可以正常播. 如果不多播，只播放一个视频又不会出现上述情况
+          2. 解决办法: 技术上并没有解决掉这个问题，另外考虑到移动端屏幕较小，多播也看不到什么东西，所以直接砍掉了这个需求，移动端只能单播
+          3. 补充说明: 翻了很多文档、资料，没有查到什么有用的东西，猜测还是和IOS、Safair 自身的视频、音频播放策略有关
   ~~~     
