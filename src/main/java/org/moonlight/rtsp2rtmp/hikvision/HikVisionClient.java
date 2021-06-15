@@ -20,7 +20,8 @@ public class HikVisionClient implements AutoCloseable {
 
     /** Note: 这些个方法跑起来是没啥问题，但是这个SDK是个共享对象，存在线程安全问题，缓存没屌用
      *  Note: 后面得闲了考虑升级一下JNA版本，康康能不能把这个搞成个独占的，每个调一次就产生一个新对象，或者加锁、不缓存客户端信息
-     * Note: 参考资料: https://stackoverflow.com/questions/33040652/how-to-create-multiple-instances-of-the-same-library-with-jna
+     * 参考资料:
+     *   1. 使用JNA 加载同一library包并创建多个不同实例: https://stackoverflow.com/questions/33040652/how-to-create-multiple-instances-of-the-same-library-with-jna
      * **/
     private HCNetSDK hCNetSDK = HCNetSDK.INSTANCE;
 

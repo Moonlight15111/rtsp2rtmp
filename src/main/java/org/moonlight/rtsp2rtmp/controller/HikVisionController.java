@@ -34,12 +34,12 @@ public class HikVisionController {
 
     private final StreamConvertHandler streamConvertHandler;
 
-    /** Note: 使用者请注意: 实际生产环境这么写的，应该拿来祭天!!! 现在为了测试先这么搞，后续再来优化海康这块的代码。生产环境中切记不能这么写！！！ **/
-    private HikVisionHandler hikVisionHandler = null;
+    private final HikVisionHandler hikVisionHandler;
 
     @Autowired
-    public HikVisionController(StreamConvertHandler streamConvertHandler) {
+    public HikVisionController(StreamConvertHandler streamConvertHandler, HikVisionHandler hikVisionHandler) {
         this.streamConvertHandler = streamConvertHandler;
+        this.hikVisionHandler = hikVisionHandler;
     }
 
     @GetMapping("/get/channels")
