@@ -20,9 +20,11 @@ rtmp {
          hls on;  
          hls_path /tmp/hls;         # 请确保该目录存在或有足够的权限
          wait_key on;               # 对视频切片进行保护，这样就不会产生马赛克了
-         hls_fragment 10s;          # 每个视频切片的时长
-         hls_playlist_length 60s;   # 总共可以回看的事件
+         hls_fragment 10s;          # 每个视频切片的时长  hls_fragment 1s;
+         hls_max_fragment 20s;      # 每个视频切片最大的时长 hls_max_fragment 2s;
+         hls_playlist_length 60s;   # 总共可以回看的事件  hls_playlist_length 3s;
          hls_continuous on;         # 连续模式。
+         hls_sync 2ms;
          hls_cleanup on;            # 对多余的切片进行删除。
          hls_nested on;             # 嵌套模式
        }

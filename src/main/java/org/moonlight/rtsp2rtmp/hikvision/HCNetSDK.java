@@ -21,6 +21,7 @@ import java.util.List;
 public interface HCNetSDK extends Library {
 
     HCNetSDK INSTANCE = (HCNetSDK) Native.loadLibrary(HikSdkLibraryPath.HIKVISION_DLL_PATH, HCNetSDK.class);
+
     /***宏定义***/
     //常量
     public static final int MAX_NAMELEN = 16;	//DVR本地登陆名
