@@ -3,7 +3,7 @@
 #### 功能介绍
  * rtsp转rtmp
  * 大华DSS接口对接
- * 海康调用SDK获取设备通道并拼接rtsp地址
+ * 海康调用SDK获取设备通道并拼接rtsp地址，调用SDK控制摄像头
  
 #### 功能详解
 ##### rtsp转rtmp
@@ -15,9 +15,12 @@
  2. 从大华获取设备信息
  3. 根据设备获取通道、rtsp流、hls流地址
 ##### 海康对接
- 1. 通过海康SDK获取到对应设备的通道数、通道号
- 2. 通过通道号拼接rtsp地址
- 3. 将rtsp转为rtmp流
+ 1. 通过海康SDK获取到对应设备的通道数、通道号, 通过通道号拼接rtsp地址
+ 2. 通过海康SDK控制摄像头,可操控摄像头进行转向、调焦等操作, 自动巡航、调整预置点等暂未实现
+     如有需求,请自行对照海康API文档进行实现, 另外需要注意的是, 这些操作是实时的, 但是想要实时
+     看到摄像头做出相应的动作, 只能直连海康摄像头观看, 即本项目的预览是有一定延迟的, 经过调整
+     可以把延迟压到5 - 10秒左右
+     海康API: https://open.hikvision.com/docs/d2da3584e3859815a750128dd892fc34
 
 #### 模块说明
   ```
@@ -63,7 +66,8 @@
      1. https://www.cnblogs.com/yanjieli/p/10615361.html
      2. https://blog.csdn.net/qq_33833327/article/details/109154307
 
-- Linux nginx配置文件参考项目中的rtsp2rtmp nginx conf.txt文件
+ - nginx配置文件
+     1. 参考本项目中的 rtsp2rtmp nginx conf.txt 文件
 
 ##### Windows环境：
   
@@ -96,8 +100,10 @@
                     h264 编码使用 H.264 baseline profile，减少编码时消耗的时间
        2. 在服务端，java转流程序设置tune为zerolatency
                     nginx配置降低切片大小: 
-                         设置 hls_fragment 1s; hls_max_fragment 2s; hls_playlist_length 3s;
-                         hls_fragment和hls_max_fragment配置一起决定了一个ts切片文件的时长，ts文件的时长会小于hls_max_fragment，大于等于hls_fragment
+                         hls_fragment 1s; 
+                         hls_max_fragment 2s; 
+                         hls_playlist_length 3s;
+                    hls_fragment和hls_max_fragment配置一起决定了一个ts切片文件的时长，ts文件的时长会小于hls_max_fragment，大于等于hls_fragment
        3. 在播放端，把播放端的缓冲区调小点
 ~~~
 
