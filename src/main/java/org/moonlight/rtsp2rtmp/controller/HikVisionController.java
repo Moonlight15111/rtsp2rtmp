@@ -51,11 +51,9 @@ public class HikVisionController {
         if (StringUtils.isAnyBlank(deviceIp, username, password, devicePort)) {
             return ReturnVO.error(1, "参数错误");
         }
-        try (HikVisionClient client = new HikVisionClient(null, username, password, deviceIp, devicePort, rtspMainUrlTmplate, rtspSubUrlTmplate)) {
-            if (client.deviceRegist() != 0) {
-                return ReturnVO.error(2, "设备登录失败");
-            }
-            hikVisionHandler.put(client);
+        try {
+            HikVisionClient client = new HikVisionClient(null, username, password, deviceIp, devicePort, rtspMainUrlTmplate, rtspSubUrlTmplate);
+            client.initAndRegist();
             return ReturnVO.ok().put("channels", client.getChannels());
         } catch (Throwable e) {
             log.error("海康SDK路径[{}]设备ip[{}]端口[{}]获取通道时发生异常", HikSdkLibraryPath.HIKVISION_DLL_PATH, deviceIp, devicePort, e);

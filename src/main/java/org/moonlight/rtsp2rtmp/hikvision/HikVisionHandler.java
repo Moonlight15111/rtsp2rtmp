@@ -63,9 +63,11 @@ public class HikVisionHandler implements ApplicationRunner, DisposableBean{
     @Override
     public void destroy() throws Exception {
         for (HikVisionClient client : clientMap.values()) {
-            client.close();
+            client.logout();
         }
         clientMap.clear();
+        // 释放SDK资源
+        HCNetSDK.INSTANCE.NET_DVR_Cleanup();
     }
 
     @Override
