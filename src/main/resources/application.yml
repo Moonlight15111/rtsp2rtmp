@@ -31,7 +31,7 @@ dss:
     crf: 28
     preset: ultrafast
     socket-timeout: 10
-    srw-timeout: 20
+    rw-timeout: 20
 spring:
   thymeleaf:
     cache: false
