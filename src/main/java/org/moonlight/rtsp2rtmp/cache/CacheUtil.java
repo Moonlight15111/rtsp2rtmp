@@ -29,4 +29,12 @@ public final class CacheUtil {
             CONVERTING_CAMERA_CACHE.remove(rtspUrl);
         }
     }
+
+    public static void clearJob() {
+        for (String key : CacheUtil.CONVERT_JOB_CACHE.keySet()) {
+            removeCache(key);
+        }
+        CacheUtil.CONVERTING_CAMERA_CACHE.clear();
+        CacheUtil.CONVERT_JOB_CACHE.clear();
+    }
 }

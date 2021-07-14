@@ -10,7 +10,6 @@ import org.moonlight.rtsp2rtmp.util.HttpUtil;
 import org.moonlight.rtsp2rtmp.vo.convert.CameraVO;
 import org.moonlight.rtsp2rtmp.vo.ReturnVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -228,20 +227,16 @@ public class StreamConvertHandler {
     /**
      * 功能描述: <br>
      * 〈〉
-     * 移除所有的转流任务
+     * 清空所有的转流任务
      * @return ReturnVO
      * @since 1.0.0
      * @author Moonlight
      * @date 2021/6/1 14:36
      */
-    public ReturnVO removeAllConvertJob() {
+    public ReturnVO clearJob() {
         lock.lock();
         try {
-            for (String key : CacheUtil.CONVERT_JOB_CACHE.keySet()) {
-                CacheUtil.removeCache(key);
-            }
-            CacheUtil.CONVERTING_CAMERA_CACHE.clear();
-            CacheUtil.CONVERT_JOB_CACHE.clear();
+            CacheUtil.clearJob();
         } finally {
             lock.unlock();
         }
